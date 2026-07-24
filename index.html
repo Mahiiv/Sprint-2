@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cash-Flow</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Cash-Flow</h1>
+    <p class="heading">Salary & Expense Tracker</p>
+
+    <div id="warning"></div>
+
+    <div class="box">
+
+        <h2>Salary</h2>
+
+        <input
+        type="number"
+        id="salary"
+        placeholder="Enter Salary">
+
+        <button id="salaryBtn">
+            Save Salary
+        </button>
+
+    </div>
+    <div class="box">
+
+        <h2>Add Expense</h2>
+
+        <input
+        type="text"
+        id="expenseName"
+        placeholder="Expense Name">
+
+        <input
+        type="number"
+        id="expenseAmount"
+        placeholder="Expense Amount">
+
+        <button id="expenseBtn">
+            Add Expense
+        </button>
+
+    </div>
+
+    <div class="summary">
+
+        <div class="card">
+
+            <h3>Total Salary</h3>
+
+            <p id="showSalary">
+                ₹0
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>Total Expenses</h3>
+
+            <p id="showExpense">
+                ₹0
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>Remaining Balance</h3>
+
+            <p id="balance">
+                ₹0
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="currency">
+
+        <label>
+
+            Currency :
+
+        </label>
+
+        <select id="currency">
+
+            <option value="INR">
+                INR
+            </option>
+
+            <option value="USD">
+                USD
+            </option>
+
+            <option value="EUR">
+                EUR
+            </option>
+
+        </select>
+
+    </div>
+
+    <div class="expenseBox">
+
+        <h2>Expense List</h2>
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Name</th>
+
+                    <th>Amount</th>
+
+                    <th>Delete</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="expenseList">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <div class="chartBox">
+
+        <canvas id="myChart"></canvas>
+
+    </div>
+
+    <button id="download">
+
+        Download Report
+
+    </button>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
