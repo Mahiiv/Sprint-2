@@ -33,13 +33,19 @@ if(localStorage.getItem("expenses")){
     expenses = JSON.parse(localStorage.getItem("expenses"));
 }
 
-showSalary.innerHTML = "₹" + salary;
+function getSymbol(){
+
+    if(currency.value == "USD") return "$";
+    if(currency.value == "EUR") return "€";
+    return "₹";
+
+}
 
 salaryBtn.addEventListener("click",function(){
 
     let value = Number(salaryInput.value);
 
-    if(value <= 0){
+    if(salaryInput.value.trim() === "" || isNaN(value) || value <= 0){
 
         alert("Enter Valid Salary");
         salaryInput.focus();
@@ -53,9 +59,7 @@ salaryBtn.addEventListener("click",function(){
 
     salaryInput.value = "";
 
-    showSalary.innerHTML = "₹" + salary;
-
-    updateBalance();
+    render();
 
 });
 
@@ -73,7 +77,7 @@ expenseBtn.addEventListener("click",function(){
 
     }
 
-    if(amount <= 0){
+    if(expenseAmount.value.trim() === "" || isNaN(amount) || amount <= 0){
 
         alert("Enter Valid Expense Amount");
         expenseAmount.focus();
@@ -95,20 +99,18 @@ expenseBtn.addEventListener("click",function(){
     expenseName.value = "";
     expenseAmount.value = "";
 
-    showExpenses();
+    render();
 
 });
 
 
-function showExpenses(){
+function renderExpenseList(){
 
     expenseList.innerHTML = "";
 
-    totalExpense = 0;
+    let symbol = getSymbol();
 
     for(let i=0;i<expenses.length;i++){
-
-        totalExpense += expenses[i].amount;
 
         expenseList.innerHTML +=
 
@@ -116,7 +118,7 @@ function showExpenses(){
 
         <td>${expenses[i].name}</td>
 
-        <td>₹${expenses[i].amount}</td>
+        <td>${symbol}${(expenses[i].amount * rate).toFixed(2)}</td>
 
         <td>
 
@@ -131,13 +133,7 @@ function showExpenses(){
         </td>
 
         </tr>`;
-
     }
-
-    showExpense.innerHTML = "₹" + totalExpense;
-
-    updateBalance();
-
 }
 
 function deleteExpense(index){
@@ -153,10 +149,8 @@ function deleteExpense(index){
             JSON.stringify(expenses)
         );
 
-        showExpenses();
-
+        render();
     }
-
 }
 
 let ctx = document.getElementById("myChart");
@@ -212,18 +206,6 @@ function updateChart(){
 
 }
 
-function updateBalance(){
-
-    let remain = salary - totalExpense;
-
-    balance.innerHTML = "₹" + remain;
-
-    updateChart();
-
-    checkWarning();
-
-}
-
 function checkWarning(){
 
     let remain = salary - totalExpense;
@@ -263,7 +245,7 @@ async function changeCurrency(){
     if(selected == "INR"){
 
         rate = 1;
-        displayCurrency();
+        render();
         return;
 
     }
@@ -278,7 +260,7 @@ async function changeCurrency(){
 
         rate = data.rates[selected];
 
-        displayCurrency();
+        render();
 
     }
 
@@ -289,33 +271,25 @@ async function changeCurrency(){
     }
 
 }
+function render(){
 
-function displayCurrency(){
+    totalExpense = 0;
 
-    let symbol = "₹";
-
-    if(currency.value == "USD"){
-
-        symbol = "$";
-
-    }
-
-    if(currency.value == "EUR"){
-
-        symbol = "€";
-
+    for(let i=0;i<expenses.length;i++){
+        totalExpense += expenses[i].amount;
     }
 
     let remain = salary - totalExpense;
 
-    showSalary.innerHTML =
-    symbol + (salary * rate).toFixed(2);
+    let symbol = getSymbol();
 
-    showExpense.innerHTML =
-    symbol + (totalExpense * rate).toFixed(2);
+    showSalary.innerHTML = symbol + (salary * rate).toFixed(2);
+    showExpense.innerHTML = symbol + (totalExpense * rate).toFixed(2);
+    balance.innerHTML = symbol + (remain * rate).toFixed(2);
 
-    balance.innerHTML =
-    symbol + (remain * rate).toFixed(2);
+    renderExpenseList();
+    updateChart();
+    checkWarning();
 
 }
 
@@ -329,6 +303,8 @@ function downloadPDF(){
 
     let y = 20;
 
+    let symbol = getSymbol();
+
     doc.setFontSize(18);
     doc.text("Cash Flow Report",20,y);
 
@@ -336,15 +312,15 @@ function downloadPDF(){
 
     doc.setFontSize(12);
 
-    doc.text("Salary : ₹"+salary,20,y);
+    doc.text("Salary : "+symbol+(salary*rate).toFixed(2),20,y);
 
     y += 10;
 
-    doc.text("Total Expense : ₹"+totalExpense,20,y);
+    doc.text("Total Expense : "+symbol+(totalExpense*rate).toFixed(2),20,y);
 
     y += 10;
 
-    doc.text("Remaining Balance : ₹"+(salary-totalExpense),20,y);
+    doc.text("Remaining Balance : "+symbol+((salary-totalExpense)*rate).toFixed(2),20,y);
 
     y += 20;
 
@@ -366,28 +342,13 @@ function downloadPDF(){
 
                 (i+1)+". "+
                 expenses[i].name+
-                " - ₹"+
-                expenses[i].amount,
-
+                " - "+symbol+(expenses[i].amount*rate).toFixed(2),
                 20,
                 y
-
             );
-
             y += 10;
-
         }
-
     }
-
     doc.save("CashFlow_Report.pdf");
-
 }
-
-showExpenses();
-
-displayCurrency();
-
-checkWarning();
-
-updateChart();
+render();
