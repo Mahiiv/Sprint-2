@@ -1,8 +1,8 @@
 # 💰 Cash-Flow — Salary & Expense Tracker
 
-Cash-Flow is a Vanilla JavaScript salary and expense tracking dashboard that lets users record their salary, log expenses, and instantly see their remaining balance — with visual and exportable reporting built in.
+Cash-Flow is a vanilla JavaScript dashboard for tracking salary and expenses in real time — log what you earn, log what you spend, and instantly see what's left, with a live chart and exportable PDF report on top.
 
-Built as part of Sprint 02, with a focus on DOM manipulation, state management, localStorage persistence, and third-party API/library integration.
+Built as part of Sprint 02, this project was a hands-on exercise in DOM manipulation, state management, localStorage persistence, and integrating third-party APIs and libraries (Chart.js, jsPDF, and a live currency exchange API).
 
 ---
 
@@ -11,8 +11,7 @@ Built as part of Sprint 02, with a focus on DOM manipulation, state management, 
 sprint-2-eta.vercel.app
 
 ## Video Walkthrough
-
-*(add your demo video link here)*
+(https://drive.google.com/file/d/18a07zEVObIS4I_ESH6aBGT6Id3pPHqj8/view?usp=sharing)
 
 ---
 
